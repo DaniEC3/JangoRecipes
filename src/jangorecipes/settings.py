@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-=x6di8@k(e)ja57qetu_$ks615)v!!3jg_4f3x3i45ls9mea*b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".azurewebsites.net"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".azurewebsites.net", "https://djangorecipes-fye2e3ctapgua3d0.centralus-01.azurewebsites.net"]
 
 
 # Application definition
