@@ -14,7 +14,7 @@ DIFFICULTY_CHOICES = (
 class Recipe(models.Model):
     name = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cooking_time = models.IntegerField(help_text='in minutes')
+    cooking_time = models.IntegerField(help_text='in minutes', default=0)
     description = models.TextField()
     ingredients = models.TextField()
     instructions = models.TextField()

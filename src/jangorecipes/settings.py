@@ -15,6 +15,13 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Azure App Service settings
+STATIC_URL = "static/"
+
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -25,7 +32,7 @@ SECRET_KEY = 'django-insecure-=x6di8@k(e)ja57qetu_$ks615)v!!3jg_4f3x3i45ls9mea*b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".azurewebsites.net"]
 
 
 # Application definition
