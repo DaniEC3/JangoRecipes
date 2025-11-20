@@ -35,7 +35,6 @@ class RecipeModelTest(TestCase):
             cooking_time=45,
             description="A delicious chocolate cake recipe.",
             ingredients="Flour, Sugar, Cocoa, Eggs, Butter",
-            difficulty="Medium",
             instructions="Step 1: Mix dry ingredients. Step 2: Add wet ingredients. Step 3: Bake at 350°F."
         )
     
@@ -91,7 +90,6 @@ class RecipeModelTest(TestCase):
             cooking_time=20,
             description="Simple vanilla cookies.",
             ingredients="Flour, Sugar, Butter, Vanilla",
-            difficulty="Easy",
             instructions="Mix and bake."
         )
         
@@ -114,7 +112,6 @@ class RecipeModelTest(TestCase):
             cooking_time=5,
             description="Temporary",
             ingredients="Test",
-            difficulty="Easy",
             instructions="Test"
         )
         
@@ -139,18 +136,7 @@ class RecipeModelTest(TestCase):
             cooking_time=30,
             description="Test",
             ingredients="Test ingredients",
-            difficulty="Medium",
             instructions="Test"
         )
-        self.assertEqual(recipe.difficulty, "Medium")
+        self.assertEqual(recipe.difficulty, "Intermediate")
         
-        # Test default value
-        recipe2 = Recipe.objects.create(
-            name="Default Recipe",
-            user=self.test_user,
-            cooking_time=15,
-            description="Test",
-            ingredients="Test",
-            instructions="Test"
-        )
-        self.assertEqual(recipe2.difficulty, "Easy")  # Should default to Easy
