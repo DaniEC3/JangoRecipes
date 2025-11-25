@@ -10,6 +10,7 @@ class Recipe(models.Model):
     description = models.TextField()
     ingredients = models.TextField()
     instructions = models.TextField()   
+    pic = models.ImageField(upload_to='recipe_pics', default='no_picture.jpg')
     @property
     def difficulty(self):
         """Calculate difficulty based on cooking time and number of ingredients"""
