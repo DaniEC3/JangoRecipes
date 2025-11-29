@@ -34,6 +34,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".azurewebsites.net", "https://djangorecipes-fye2e3ctapgua3d0.centralus-01.azurewebsites.net"]
 
+# CSRF settings for Azure
+CSRF_TRUSTED_ORIGINS = [
+    "https://djangorecipes-fye2e3ctapgua3d0.centralus-01.azurewebsites.net"
+]
+
 
 # Application definition
 
