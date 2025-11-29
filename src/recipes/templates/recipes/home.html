@@ -2,14 +2,32 @@
 
 <!DOCTYPE html>
 <html>
-<title>
-    Recipe App Home
-</title>
+
+<head>
+    <title>Recipe App Home</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'recipes/css/styles.css' %}">
+</head>
 
 <body>
     <h1 style="text-align:center">Welcome to our Recipe App</h1>
     <br>
     <img src="{% static 'recipes/images/recipe.jpg' %}" alt="home" width="full" height="full">
+    <h1>Recipes List</h1>
+
+    <table border="1" cellpadding="5" cellspacing="5">
+        <tr>
+            <th>Recipe Title</th>
+            <th>Recipe Image</th>
+        </tr>
+        {% for object in object_list %}
+        <tr>
+            <td>
+                <a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+            </td>
+            <td><img src="{{object.pic.url}}" width="150" height="200" /></td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 
 </html>

@@ -139,4 +139,19 @@ class RecipeModelTest(TestCase):
             instructions="Test"
         )
         self.assertEqual(recipe.difficulty, "Intermediate")
+    # TEST 8: Absolute URL
+    def test_absolute_url(self):
+        """
+        Test that the absolute URL returns the correct URL for a recipe.
+        This verifies the get_absolute_url method works as expected.
+        """
+        recipe = Recipe.objects.create(
+            name="Test Recipe",
+            user=self.test_user,
+            cooking_time=30,
+            description="Test",
+            ingredients="Test ingredients",
+            instructions="Test"
+        )
+        self.assertEqual(recipe.get_absolute_url(), '/recipe/2')
         

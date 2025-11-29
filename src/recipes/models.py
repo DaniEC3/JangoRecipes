@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import reverse
 
 # Create your models here.
 
@@ -23,6 +24,8 @@ class Recipe(models.Model):
             return 'Intermediate'
         else:
             return 'Hard'
+    def get_absolute_url(self):
+        return reverse('recipes:detail', kwargs={'id': self.pk})
     
     def __str__(self):
         return self.name  
