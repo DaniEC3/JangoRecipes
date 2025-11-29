@@ -9,25 +9,69 @@
 </head>
 
 <body>
-    <h1 style="text-align:center">Welcome to our Recipe App</h1>
-    <br>
-    <img src="{% static 'recipes/images/recipe.jpg' %}" alt="home" width="full" height="full">
-    <h1>Recipes List</h1>
+    <div class="main-container">
+        <header class="main-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <span>👨‍🍳</span>
+                    </div>
+                    <h1>Jango Recipes</h1>
+                </div>
 
-    <table border="1" cellpadding="5" cellspacing="5">
-        <tr>
-            <th>Recipe Title</th>
-            <th>Recipe Image</th>
-        </tr>
-        {% for object in object_list %}
-        <tr>
-            <td>
-                <a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
-            </td>
-            <td><img src="{{object.pic.url}}" width="150" height="200" /></td>
-        </tr>
-        {% endfor %}
-    </table>
+                <div class="search-section">
+                    <input type="text" placeholder="Search recipes..." class="search-input" />
+                </div>
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>Discover Your Next Favorite Dish</h2>
+                    <p>
+                        Explore our collection of delicious, easy-to-follow recipes that will inspire your cooking
+                        journey.
+                        From quick weeknight dinners to impressive desserts.
+                    </p>
+                    <a href="#recipes" class="cta-button">Browse Recipes</a>
+                </div>
+                <div class="hero-image">
+                    <img src="{% static 'recipes/images/recipe.jpg' %}" alt="Delicious Food">
+                </div>
+            </div>
+        </section>
+
+        <section id="recipes" class="content-section">
+            <!-- Recipe Grid -->
+            <div class="recipe-grid">
+                {% for object in object_list %}
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <img src="{{ object.pic.url }}" alt="{{ object.name }}">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>{{ object.name }}</h3>
+                        <p class="recipe-meta">Difficulty: {{ object.difficulty }}</p>
+                        <p class="recipe-meta">Time: {{ object.cooking_time }} min</p>
+                        <a href="{{ object.get_absolute_url }}" class="view-btn">View Recipe</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>👨‍🍳</span>
+                    <span>Delicious Recipes</span>
+                </div>
+                <p>Making cooking simple and enjoyable for everyone</p>
+            </div>
+        </footer>
+    </div>
 </body>
 
 </html>
