@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Jango Recipes{% endblock %}
+
+{% block content %}
+<div style="min-height: 70vh; display: flex; justify-content: center; align-items: center;">
+  <div class="auth-container"
+    style="max-width: 400px; margin: 4px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h1 style="text-align: center; color: #333; margin-bottom: 20px;">Login</h1>
+
+    {% if error_message %}
+    <div class="error-message"
+      style="background-color: #ffebee; color: #c62828; padding: 10px; border-radius: 4px; margin-bottom: 20px;">
+      {{error_message}}
+    </div>
+    {% endif %}
+
+    <form action="" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+      {% csrf_token %}
+
+      {{form}}
+
+      <button type="submit"
+        style="background-color: #f97316; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background-color 0.3s;">
+        Login
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

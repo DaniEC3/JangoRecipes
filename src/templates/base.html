@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{% block title %}Jango Recipes{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'recipes/css/styles.css' %}">
+</head>
+
+<body>
+  <div class="main-container">
+    <header class="main-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <span>👨‍🍳</span>
+          </div>
+          <h1>Jango Recipes</h1>
+        </div>
+
+        <div class="logout-section">
+          <a class="logout-btn" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <span>👨‍🍳</span>
+          <span>Delicious Recipes</span>
+        </div>
+        <p>Making cooking simple and enjoyable for everyone</p>
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>

@@ -154,4 +154,5 @@ class RecipeModelTest(TestCase):
             instructions="Test"
         )
         self.assertEqual(recipe.get_absolute_url(), '/recipe/2')
+    
         
