@@ -53,9 +53,11 @@
           <div class="detail-grid">
             <div class="detail-section">
               <h2>Ingredients</h2>
-              <div class="ingredients-list">
-                {{ recipe.ingredients|linebreaks }}
-              </div>
+              <ul>
+                {% for ingredient in recipe.ingredients.all %}
+                <li>{{ ingredient.name }}</li>
+                {% endfor %}
+              </ul>
             </div>
 
             <div class="detail-section">

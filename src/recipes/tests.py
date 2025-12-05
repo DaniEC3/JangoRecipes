@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import Recipe
+from ingredients.models import Ingredient
 
 
 # ============================================
@@ -34,9 +35,11 @@ class RecipeModelTest(TestCase):
             user=cls.test_user,
             cooking_time=45,
             description="A delicious chocolate cake recipe.",
-            ingredients="Flour, Sugar, Cocoa, Eggs, Butter",
             instructions="Step 1: Mix dry ingredients. Step 2: Add wet ingredients. Step 3: Bake at 350°F."
         )
+        i1 = Ingredient.objects.create(name="Flour", calories=100, price=1.0, quantity=1, supplier="Store")
+        i2 = Ingredient.objects.create(name="Sugar", calories=100, price=1.0, quantity=1, supplier="Store")
+        cls.recipe.ingredients.add(i1, i2)
     
     # TEST 1: Object Creation
     def test_recipe_creation(self):
@@ -89,9 +92,10 @@ class RecipeModelTest(TestCase):
             user=self.test_user,
             cooking_time=20,
             description="Simple vanilla cookies.",
-            ingredients="Flour, Sugar, Butter, Vanilla",
             instructions="Mix and bake."
         )
+        i3 = Ingredient.objects.create(name="Vanilla", calories=50, price=2.0, quantity=1, supplier="Store")
+        recipe2.ingredients.add(i3)
         
         user_recipes = self.test_user.recipe_set.all()
         self.assertEqual(user_recipes.count(), 2)
@@ -111,9 +115,10 @@ class RecipeModelTest(TestCase):
             user=temp_user,
             cooking_time=5,
             description="Temporary",
-            ingredients="Test",
             instructions="Test"
         )
+        i4 = Ingredient.objects.create(name="Test", calories=10, price=0.5, quantity=1, supplier="Store")
+        temp_recipe.ingredients.add(i4)
         
         recipe_id = temp_recipe.id
         
@@ -135,9 +140,10 @@ class RecipeModelTest(TestCase):
             user=self.test_user,
             cooking_time=30,
             description="Test",
-            ingredients="Test ingredients",
             instructions="Test"
         )
+        i5 = Ingredient.objects.create(name="Test Ing", calories=10, price=0.5, quantity=1, supplier="Store")
+        recipe.ingredients.add(i5)
         self.assertEqual(recipe.difficulty, "Intermediate")
     # TEST 8: Absolute URL
     def test_absolute_url(self):
@@ -150,9 +156,10 @@ class RecipeModelTest(TestCase):
             user=self.test_user,
             cooking_time=30,
             description="Test",
-            ingredients="Test ingredients",
             instructions="Test"
         )
+        i6 = Ingredient.objects.create(name="Test Ing 2", calories=10, price=0.5, quantity=1, supplier="Store")
+        recipe.ingredients.add(i6)
         self.assertEqual(recipe.get_absolute_url(), '/recipe/2')
     
         

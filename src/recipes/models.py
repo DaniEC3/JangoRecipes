@@ -4,18 +4,20 @@ from django.shortcuts import reverse
 
 # Create your models here.
 
+from ingredients.models import Ingredient
+
 class Recipe(models.Model):
     name = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cooking_time = models.IntegerField(help_text='in minutes', default=0)
     description = models.TextField()
-    ingredients = models.TextField()
+    ingredients = models.ManyToManyField(Ingredient)
     instructions = models.TextField()   
     pic = models.ImageField(upload_to='recipe_pics', default='no_picture.jpg')
     @property
     def difficulty(self):
         """Calculate difficulty based on cooking time and number of ingredients"""
-        ingredient_count = len(self.ingredients.split(","))
+        ingredient_count = self.ingredients.count()
         if self.cooking_time < 30 and ingredient_count <= 5:
             return 'Easy'
         elif self.cooking_time < 30 and ingredient_count > 5:
