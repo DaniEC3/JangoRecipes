@@ -10,8 +10,14 @@ def IngredientsHome(request):
 
 @login_required
 def ingredient_search(request):
+    form = IngredientSearchForm(request.POST or None)
     # Create the instance from forms
-    form = IngredientSearchForm()
+    if request.method == 'POST':
+        recipe_name = request.POST.get('recipe_name')
+        chart_type = request.POST.get('chart_type')
+        print(recipe_name)
+        print(chart_type)
+
     #pack up data to be sent to template in the context dictionary
     context={
            'form': form,
