@@ -12,6 +12,14 @@
         {{ form}}
         <button type="submit">Search</button>
     </form>
+    {% if ingredients_df %}
+    {{ingredients_df|safe}}
+    {% else %}
+    <h3> no data</h3>
+    {% endif %}
+    {% if chart %}
+    <img src="data:image/png;base64, {{chart|safe}}">
+    {% endif %}
 </body>
 
 </html>
