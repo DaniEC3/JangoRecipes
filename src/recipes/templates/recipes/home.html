@@ -21,6 +21,25 @@
     </div>
 </section>
 
+<section class="search-section">
+    <div class="search-container">
+        <h2>Search Recipes</h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Search</button>
+        </form>
+        {% if recipes_df %}
+        {{recipes_df|safe}}
+        {% else %}
+        <h3> no data</h3>
+        {% endif %}
+        {% if chart %}
+        <img src="data:image/png;base64, {{chart|safe}}">
+        {% endif %}
+    </div>
+</section>
+
 <section id="recipes" class="content-section">
     <!-- Recipe Grid -->
     <div class="recipe-grid">

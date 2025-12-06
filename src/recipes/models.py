@@ -4,14 +4,12 @@ from django.shortcuts import reverse
 
 # Create your models here.
 
-from ingredients.models import Ingredient
-
 class Recipe(models.Model):
     name = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cooking_time = models.IntegerField(help_text='in minutes', default=0)
     description = models.TextField()
-    ingredients = models.ManyToManyField(Ingredient)
+    ingredients = models.ManyToManyField('Ingredient')  # Reference Ingredient in the same app
     instructions = models.TextField()   
     pic = models.ImageField(upload_to='recipe_pics', default='no_picture.jpg')
     @property
@@ -31,3 +29,17 @@ class Recipe(models.Model):
     
     def __str__(self):
         return self.name  
+
+class Ingredient(models.Model):
+    name = models.CharField(max_length=255)
+    calories  = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    quantity = models.IntegerField()
+    supplier = models.CharField(max_length=255)
+    pic = models.ImageField(upload_to='ingredient_pics', default='no_picture.jpg')
+    
+    def get_absolute_url(self):
+        return reverse('ingredients:detail', kwargs={'id': self.pk})
+
+    def __str__(self):
+        return self.name
