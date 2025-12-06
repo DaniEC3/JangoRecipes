@@ -50,11 +50,10 @@ class Home(LoginRequiredMixin, ListView):
             
             if qs.exists():
                 # Convert to DataFrame
-                recipes_df = DataFrame(qs.values())
-                
-                # Generate chart
-                context['chart'] = get_chart(chart_type, recipes_df, labels=recipes_df['name'].values)
-                
+                if qs.values() != None:
+                    recipes_df = DataFrame(qs.values())
+                else:
+                    recipes_df = Recipe.objects.all()
                 # Convert DataFrame to HTML table
                 context['recipes_df'] = recipes_df.to_html()
         

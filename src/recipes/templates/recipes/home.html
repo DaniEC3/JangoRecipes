@@ -28,19 +28,15 @@
             {% csrf_token %}
             {{ form }}
             <button type="submit">Search</button>
+            <a href="{% url 'recipes:home' %}" class="clear-filters-btn">Clear Filters</a>
         </form>
-        {% if recipes_df %}
-        {{recipes_df|safe}}
-        {% else %}
-        <h3> no data</h3>
-        {% endif %}
-
     </div>
 </section>
 
 <section id="recipes" class="content-section">
     <!-- Recipe Grid -->
     <div class="recipe-grid">
+        {% if object_list %}
         {% for object in object_list %}
         <div class="recipe-card">
             <div class="recipe-image">
@@ -54,6 +50,9 @@
             </div>
         </div>
         {% endfor %}
+        {% else %}
+        <h3> no data</h3>
+        {% endif %}
     </div>
 </section>
 {% endblock %}
