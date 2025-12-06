@@ -6,7 +6,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ingredients', '0002_ingredient_pic'),
         ('recipes', '0004_recipe_pic'),
     ]
 

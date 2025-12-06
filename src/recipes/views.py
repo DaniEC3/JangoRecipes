@@ -4,7 +4,7 @@ from .models import Ingredient
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .forms import RecipeSearchForm 
+from .forms import RecipeSearchForm, ChartForm
 import pandas as pd
 from pandas import DataFrame
 from .utils import get_chart
@@ -40,12 +40,10 @@ class Home(LoginRequiredMixin, ListView):
         
         # Initialize chart and dataframe
         context['recipes_df'] = None
-        context['chart'] = None
         
         # If POST request, process the search and generate chart
         if self.request.method == 'POST':
             recipe_name = self.request.POST.get('recipe_name')
-            chart_type = self.request.POST.get('chart_type')
             
             # Get the filtered queryset
             qs = self.get_queryset()
@@ -73,4 +71,15 @@ class Home(LoginRequiredMixin, ListView):
 @login_required
 def Details(request, id):
     recipe = get_object_or_404(Recipe, pk=id)
-    return render(request, 'recipes/recipe_detail.html', {'recipe': recipe})
+    form = ChartForm(request.POST or None)
+    if request.method == 'POST':
+        chart_type = request.POST.get('chart_type')
+        chart = get_chart(chart_type, recipes_df, labels=recipes_df['name'].values)
+    else:
+        chart = None
+    
+    context = {'recipe': recipe,
+    'chart': chart,
+    'form': form
+    }
+    return render(request, 'recipes/recipe_detail.html', context)

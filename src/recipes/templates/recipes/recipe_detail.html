@@ -68,7 +68,18 @@
             </div>
           </div>
         </div>
-
+        <div class="detail-chart">
+          {% if form %}
+          <form method="POST" action="">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Generate Chart</button>
+          </form>
+          {% endif %}
+          {% if chart %}
+          <img src="data:image/png;base64, {{chart|safe}}">
+          {% endif %}
+        </div>
         <div class="back-link">
           <a href="{% url 'recipes:home' %}" class="cta-button">← Back to Recipes</a>
         </div>
