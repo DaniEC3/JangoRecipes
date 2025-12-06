@@ -53,7 +53,7 @@
           <div class="detail-grid">
             <div class="detail-section">
               <h2>Ingredients</h2>
-              {% if ingredients %}
+              {% if ingredient_links %}
               <div class="table-wrapper">
                 <table class="ingredients-table">
                   <thead>
@@ -61,18 +61,18 @@
                       <th>Name</th>
                       <th>Calories</th>
                       <th>Price</th>
-                      <th>Quantity</th>
+                      <th>Quantity (per recipe)</th>
                       <th>Supplier</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for ingredient in ingredients %}
+                    {% for link in ingredient_links %}
                     <tr>
-                      <td>{{ ingredient.name }}</td>
-                      <td>{{ ingredient.calories }}</td>
-                      <td>{{ ingredient.price }}</td>
-                      <td>{{ ingredient.quantity }}</td>
-                      <td>{{ ingredient.supplier }}</td>
+                      <td>{{ link.ingredient.name }}</td>
+                      <td>{{ link.ingredient.calories }}</td>
+                      <td>{{ link.ingredient.price }}</td>
+                      <td>{{ link.quantity }}</td>
+                      <td>{{ link.ingredient.supplier }}</td>
                     </tr>
                     {% endfor %}
                   </tbody>

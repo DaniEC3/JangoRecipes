@@ -39,13 +39,13 @@ def get_chart(chart_type, data, **kwargs):
 
    #select chart_type based on user input from the form
    if chart_type == '#1':
-       print("here",data)
-       plt.bar(data['name'], data['price'])
+       (print(data))
+       plt.bar(data['ingredient__name'], data['ingredient__price'])
    elif chart_type == '#2':
-       plt.plot(data['price'], data['name'])
+       plt.plot(data['ingredient__name'], data['ingredient__calories'])
    elif chart_type == '#3':
        labels=kwargs.get('labels')
-       plt.pie(data['price'], labels=labels)
+       plt.pie(data['ingredient__price'], labels=labels)
    else:
        print ('unknown chart type')
 

@@ -45,15 +45,10 @@ class Home(LoginRequiredMixin, ListView):
         if self.request.method == 'POST':
             recipe_name = self.request.POST.get('recipe_name')
             
-            # Get the filtered queryset
-            qs = self.get_queryset()
-            
+            # Get the filtered queryset - keep as queryset to preserve properties like difficulty
+            qs = self.get_queryset().prefetch_related('ingredients')
             if qs.exists():
-                if qs.values() != None:
-                    recipes = list(qs.values())
-                else:
-                    recipes = list(Recipe.objects.all().values())
-                context['recipes'] = recipes
+                context['recipes'] = qs
         
         return context
     
@@ -69,19 +64,28 @@ class Home(LoginRequiredMixin, ListView):
 def Details(request, id): 
     chart = None
     recipe = get_object_or_404(Recipe, pk=id)
-    ingredients_qs = recipe.ingredients.all()
+    ingredient_links = recipe.recipe_ingredients.select_related('ingredient')
 
     # Build dataframe for chart generation if ingredients exist
-    ingredients_df = DataFrame(list(ingredients_qs.values())) if ingredients_qs.exists() else DataFrame()
+    ingredients_df = DataFrame(
+        list(
+            ingredient_links.values(
+                'ingredient__name',
+                'ingredient__calories',
+                'ingredient__price',
+                'quantity'
+            )
+        )
+    ) if ingredient_links.exists() else DataFrame()
 
     form = ChartForm(request.POST or None)
     if request.method == 'POST' and ingredients_df.shape[0] > 0:
         chart_type = request.POST.get('chart_type')
-        chart = get_chart(chart_type, ingredients_df, labels=ingredients_df['name'].values)
+        chart = get_chart(chart_type, ingredients_df, labels=ingredients_df['ingredient__name'].values)
 
     context = {
         'recipe': recipe,
-        'ingredients': ingredients_qs,
+        'ingredient_links': ingredient_links,
         'chart': chart,
         'form': form,
     }

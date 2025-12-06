@@ -9,7 +9,7 @@ class Recipe(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cooking_time = models.IntegerField(help_text='in minutes', default=0)
     description = models.TextField()
-    ingredients = models.ManyToManyField('Ingredient')  # Reference Ingredient in the same app
+    ingredients = models.ManyToManyField('Ingredient', through='RecipeIngredient', related_name='recipes')
     instructions = models.TextField()   
     pic = models.ImageField(upload_to='recipe_pics', default='no_picture.jpg')
     @property
@@ -43,3 +43,15 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='recipe_ingredients')
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='ingredient_recipes')
+    quantity = models.CharField(max_length=100, help_text='e.g., 2 cups, 1 tbsp, 3 pieces')
+
+    class Meta:
+        unique_together = ('recipe', 'ingredient')
+
+    def __str__(self):
+        return f"{self.ingredient.name} for {self.recipe.name} ({self.quantity})"
