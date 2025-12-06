@@ -39,16 +39,13 @@ def get_chart(chart_type, data, **kwargs):
 
    #select chart_type based on user input from the form
    if chart_type == '#1':
-       #plot bar chart between date on x-axis and quantity on y-axis
-       plt.bar(data['name'], data['ingredients'])
+       print("here",data)
+       plt.bar(data['name'], data['price'])
    elif chart_type == '#2':
-       #plot line chart based on date on x-axis and price on y-axis
-       plt.plot(data['ingredients'], data['name'])
+       plt.plot(data['price'], data['name'])
    elif chart_type == '#3':
-       #generate pie chart based on the price.
-       #The ingredient names are sent from the view as labels
        labels=kwargs.get('labels')
-       plt.pie(data['name'], labels=labels)
+       plt.pie(data['price'], labels=labels)
    else:
        print ('unknown chart type')
 

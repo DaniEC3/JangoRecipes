@@ -39,7 +39,7 @@ class Home(LoginRequiredMixin, ListView):
         context['form'] = RecipeSearchForm(self.request.POST or None)
         
         # Initialize chart and dataframe
-        context['recipes_df'] = None
+        context['recipes'] = None
         
         # If POST request, process the search and generate chart
         if self.request.method == 'POST':
@@ -49,13 +49,11 @@ class Home(LoginRequiredMixin, ListView):
             qs = self.get_queryset()
             
             if qs.exists():
-                # Convert to DataFrame
                 if qs.values() != None:
-                    recipes_df = DataFrame(qs.values())
+                    recipes = list(qs.values())
                 else:
-                    recipes_df = Recipe.objects.all()
-                # Convert DataFrame to HTML table
-                context['recipes_df'] = recipes_df.to_html()
+                    recipes = list(Recipe.objects.all().values())
+                context['recipes'] = recipes
         
         return context
     
@@ -68,17 +66,23 @@ class Home(LoginRequiredMixin, ListView):
         return self.get(request, *args, **kwargs)
 
 @login_required
-def Details(request, id):
+def Details(request, id): 
+    chart = None
     recipe = get_object_or_404(Recipe, pk=id)
+    ingredients_qs = recipe.ingredients.all()
+
+    # Build dataframe for chart generation if ingredients exist
+    ingredients_df = DataFrame(list(ingredients_qs.values())) if ingredients_qs.exists() else DataFrame()
+
     form = ChartForm(request.POST or None)
-    if request.method == 'POST':
+    if request.method == 'POST' and ingredients_df.shape[0] > 0:
         chart_type = request.POST.get('chart_type')
-        chart = get_chart(chart_type, recipes_df, labels=recipes_df['name'].values)
-    else:
-        chart = None
-    
-    context = {'recipe': recipe,
-    'chart': chart,
-    'form': form
+        chart = get_chart(chart_type, ingredients_df, labels=ingredients_df['name'].values)
+
+    context = {
+        'recipe': recipe,
+        'ingredients': ingredients_qs,
+        'chart': chart,
+        'form': form,
     }
     return render(request, 'recipes/recipe_detail.html', context)

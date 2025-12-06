@@ -53,11 +53,34 @@
           <div class="detail-grid">
             <div class="detail-section">
               <h2>Ingredients</h2>
-              <ul>
-                {% for ingredient in recipe.ingredients.all %}
-                <li>{{ ingredient.name }}</li>
-                {% endfor %}
-              </ul>
+              {% if ingredients %}
+              <div class="table-wrapper">
+                <table class="ingredients-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Calories</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Supplier</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for ingredient in ingredients %}
+                    <tr>
+                      <td>{{ ingredient.name }}</td>
+                      <td>{{ ingredient.calories }}</td>
+                      <td>{{ ingredient.price }}</td>
+                      <td>{{ ingredient.quantity }}</td>
+                      <td>{{ ingredient.supplier }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <p>No ingredients listed.</p>
+              {% endif %}
             </div>
 
             <div class="detail-section">
