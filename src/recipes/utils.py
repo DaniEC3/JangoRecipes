@@ -1,6 +1,8 @@
 from io import BytesIO 
 import base64
 import matplotlib.pyplot as plt
+from fractions import Fraction
+import re
 
 def get_graph():
    #create a BytesIO buffer for the image
@@ -55,9 +57,24 @@ def get_chart(chart_type, data, **kwargs):
        
    elif chart_type == '#3':
        labels=kwargs.get('labels')
-       plt.pie(data['quantity'], autopct='%1.1f%%')
+       # Parse quantities - handles fractions like 1/4, decimals, and whole numbers
+       quantities = []
+       for qty in data['quantity']:
+           # Extract first number or fraction from string
+           match = re.search(r'(\d+/\d+|\d+\.?\d*)', str(qty))
+           if match:
+               num_str = match.group(1)
+               # Convert fraction to float
+               if '/' in num_str:
+                   quantities.append(float(Fraction(num_str)))
+               else:
+                   quantities.append(float(num_str))
+           else:
+               quantities.append(1.0)  # default if no number found
+       
+       plt.pie(quantities, autopct='%1.1f%%')
        plt.title('Ingredient Quantity Distribution')
-       plt.legend(labels, loc='upper right', bbox_to_anchor=(1.6, 0.5))
+       plt.legend(labels, loc='upper right', bbox_to_anchor=(1.7, 0.9))
    else:
        print ('unknown chart type')
 
