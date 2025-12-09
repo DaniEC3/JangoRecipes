@@ -24,11 +24,11 @@
 <section class="search-section">
     <div class="search-container">
         <h2>Search Recipes</h2>
-        <form method="POST" action="">
+        <form method="POST" action="#recipes">
             {% csrf_token %}
             {{ form }}
             <button type="submit">Search</button>
-            <a href="{% url 'recipes:home' %}" class="clear-filters-btn">Clear Filters</a>
+            <a href="{% url 'recipes:home' %}#recipes" class="clear-filters-btn">Clear Filters</a>
         </form>
     </div>
 </section>

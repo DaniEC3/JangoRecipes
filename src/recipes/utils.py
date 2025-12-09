@@ -41,11 +41,23 @@ def get_chart(chart_type, data, **kwargs):
    if chart_type == '#1':
        (print(data))
        plt.bar(data['ingredient__name'], data['ingredient__price'])
+       plt.xlabel('Ingredient')
+       plt.xticks(rotation=45, ha='right')
+       plt.ylabel('Price ($)')
+       plt.title('Ingredient Prices')
+       
    elif chart_type == '#2':
        plt.plot(data['ingredient__name'], data['ingredient__calories'])
+       plt.xlabel('Ingredient')
+       plt.xticks(rotation=45, ha='right')
+       plt.ylabel('Calories')
+       plt.title('Ingredient Calories')
+       
    elif chart_type == '#3':
        labels=kwargs.get('labels')
-       plt.pie(data['ingredient__price'], labels=labels)
+       plt.pie(data['quantity'], autopct='%1.1f%%')
+       plt.title('Ingredient Quantity Distribution')
+       plt.legend(labels, loc='upper right', bbox_to_anchor=(1.6, 0.5))
    else:
        print ('unknown chart type')
 

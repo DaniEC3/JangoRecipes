@@ -91,16 +91,17 @@
             </div>
           </div>
         </div>
-        <div class="detail-chart">
+        <div id="chart-section" class="detail-chart">
+          <h2>Ingredient Analysis</h2>
           {% if form %}
-          <form method="POST" action="">
+          <form method="POST" action="#chart-section">
             {% csrf_token %}
             {{ form }}
             <button type="submit">Generate Chart</button>
           </form>
           {% endif %}
           {% if chart %}
-          <img src="data:image/png;base64, {{chart|safe}}">
+          <img src="data:image/png;base64, {{chart|safe}}" alt="Ingredient Chart">
           {% endif %}
         </div>
         <div class="back-link">

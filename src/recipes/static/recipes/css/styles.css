@@ -258,6 +258,30 @@ body {
     transform: translateY(0);
 }
 
+/* Clear filters link styled as secondary button */
+.clear-filters-btn {
+    display: inline-block;
+    margin-left: 0.5rem;
+    background-color: transparent;
+    color: #f97316;
+    padding: 0.75rem 1rem;
+    border: 2px solid #f97316;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.15s, color 0.15s, transform 0.08s;
+}
+
+.clear-filters-btn:hover {
+    background-color: #f97316;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.clear-filters-btn:active {
+    transform: translateY(0);
+}
+
 /* Form labels styling */
 .search-container form label {
     display: block;
@@ -431,6 +455,86 @@ body {
 .back-link {
     margin-top: 3rem;
     text-align: center;
+}
+
+/* Chart Section */
+.detail-chart {
+    background-color: #fff7ed;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.detail-chart h2 {
+    color: #f97316;
+    border-bottom: 2px solid #fed7aa;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.detail-chart form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-chart form label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.detail-chart form select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #fed7aa;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: white;
+}
+
+.detail-chart form select:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.detail-chart form button[type="submit"] {
+    background-color: #f97316;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.detail-chart form button[type="submit"]:hover {
+    background-color: #ea580c;
+    transform: translateY(-1px);
+}
+
+.detail-chart form button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+.detail-chart img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Footer */

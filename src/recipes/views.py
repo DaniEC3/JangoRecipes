@@ -35,8 +35,11 @@ class Home(LoginRequiredMixin, ListView):
         """
         context = super().get_context_data(**kwargs)  # Gets default context with 'object_list'
         
-        # Add the search form to context
-        context['form'] = RecipeSearchForm(self.request.POST or None)
+        # Add the search form to context - only populate with POST data on POST requests
+        if self.request.method == 'POST':
+            context['form'] = RecipeSearchForm(self.request.POST)
+        else:
+            context['form'] = RecipeSearchForm()
         
         # Initialize chart and dataframe
         context['recipes'] = None
