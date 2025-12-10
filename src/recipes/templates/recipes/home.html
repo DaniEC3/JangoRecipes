@@ -28,7 +28,7 @@
             {% csrf_token %}
             {{ form }}
             <button type="submit">Search</button>
-            <a href="{% url 'recipes:home' %}#recipes" class="clear-filters-btn">Clear Filters</a>
+            <a href="{% url 'recipes:home' %}#recipes" id="clear-filters-btn" class="clear-filters-btn">Clear Filters</a>
         </form>
     </div>
 </section>
@@ -55,4 +55,8 @@
         {% endif %}
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'recipes/js/home.js' %}"></script>
 {% endblock %}
