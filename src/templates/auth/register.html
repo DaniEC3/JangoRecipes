@@ -6,7 +6,7 @@
 <div style="min-height: 70vh; display: flex; justify-content: center; align-items: center;">
   <div class="auth-container"
     style="max-width: 400px; margin: 4px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-    <h1 style="text-align: center; color: #333; margin-bottom: 20px;">Login</h1>
+    <h1 style="text-align: center; color: #333; margin-bottom: 20px;">Register</h1>
 
     {% if error_message %}
     <div class="error-message"
@@ -18,14 +18,28 @@
     <form action="" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
       {% csrf_token %}
 
-      {{form}}
+      {% for field in form %}
+        <div>
+          {{ field.label_tag }}
+          {{ field }}
+          {% if error_message and field.errors %}
+            <div style="color: #c62828; font-size: 14px; margin-top: 5px;">
+              {{ field.errors }}
+            </div>
+          {% endif %}
+          {% if field.help_text and not error_message %}
+            <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">{{ field.help_text|safe }}</small>
+          {% endif %}
+        </div>
+      {% endfor %}
 
       <button type="submit"
         style="background-color: #f97316; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background-color 0.3s;">
-        Login
+        Register
       </button>
+      
       <p style="text-align: center; margin-top: 10px;">
-        Don't have an account? <a href="{% url 'register' %}" style="color: #f97316; text-decoration: none; font-weight: bold;">Register here</a>
+        Already have an account? <a href="{% url 'login' %}" style="color: #f97316; text-decoration: none; font-weight: bold;">Login here</a>
       </p>
     </form>
   </div>

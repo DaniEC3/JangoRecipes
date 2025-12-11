@@ -19,9 +19,11 @@
           <h1>Jango Recipes</h1>
         </div>
 
+        {% if user.is_authenticated %}
         <div class="logout-section">
           <a class="logout-btn" href="{% url 'logout' %}">Logout</a>
         </div>
+        {% endif %}
       </div>
     </header>
 

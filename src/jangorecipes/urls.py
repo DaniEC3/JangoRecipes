@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
-from .view import login_view, logout_view
+from .view import login_view, logout_view, register_view
 
 from django.conf import settings # Allows you to access the MEDIA_URL and MEDIA_ROOT variables
 from django.conf.urls.static import static # Allows you to create URLs from local folder names.
@@ -27,6 +27,7 @@ urlpatterns = [
     path('', include('recipes.urls')),
     path('login/', login_view, name='login'),
     path("logout/", logout_view, name='logout'), 
+    path('register/', register_view, name='register'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
