@@ -362,4 +362,321 @@ class IngredientModelTest(TestCase):
         # Test .get() with other fields
         sugar = Ingredient.objects.get(name='Sugar')
         self.assertEqual(sugar, self.sugar)
+
+
+# ============================================
+# USER AUTHENTICATION TESTS
+# ============================================
+
+class LoginViewTest(TestCase):
+    """
+    Test suite for the login view.
+    Tests GET requests, POST with valid/invalid credentials, and redirects.
+    """
+    
+    @classmethod
+    def setUpTestData(cls):
+        """
+        Create a test user for authentication tests.
+        This runs once before all tests in this class.
+        """
+        cls.test_user = User.objects.create_user(
+            username='testuser',
+            password='testpass123'
+        )
+        cls.login_url = '/login/'
+    
+    def test_login_view_get_request(self):
+        """
+        Test that GET request to login page returns 200 and uses correct template.
+        """
+        response = self.client.get(self.login_url)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/login.html')
+        self.assertIn('form', response.context)
+        self.assertIsNone(response.context.get('error_message'))
+    
+    def test_login_view_post_valid_credentials(self):
+        """
+        Test that POST with valid credentials logs user in and redirects to home.
+        """
+        response = self.client.post(self.login_url, {
+            'username': 'testuser',
+            'password': 'testpass123'
+        })
+        
+        # Should redirect to recipes home page
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/recipe/home/')
+        
+        # Verify user is logged in
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+        self.assertEqual(response.wsgi_request.user.username, 'testuser')
+    
+    def test_login_view_post_invalid_username(self):
+        """
+        Test that POST with invalid username shows error message.
+        """
+        response = self.client.post(self.login_url, {
+            'username': 'wronguser',
+            'password': 'testpass123'
+        })
+        
+        # Should stay on login page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/login.html')
+        
+        # Should show error message
+        self.assertIn('error_message', response.context)
+        self.assertEqual(response.context['error_message'], 'Invalid username or password')
+        
+        # User should not be logged in
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+    
+    def test_login_view_post_invalid_password(self):
+        """
+        Test that POST with invalid password shows error message.
+        """
+        response = self.client.post(self.login_url, {
+            'username': 'testuser',
+            'password': 'wrongpassword'
+        })
+        
+        # Should stay on login page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/login.html')
+        
+        # Should show error message
+        self.assertEqual(response.context['error_message'], 'Invalid username or password')
+        
+        # User should not be logged in
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+    
+    def test_login_view_post_empty_credentials(self):
+        """
+        Test that POST with empty credentials shows form errors.
+        """
+        response = self.client.post(self.login_url, {
+            'username': '',
+            'password': ''
+        })
+        
+        # Should stay on login page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/login.html')
+        
+        # Form should have errors
+        self.assertIn('form', response.context)
+        self.assertFalse(response.context['form'].is_valid())
+        
+        # User should not be logged in
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+
+class LogoutViewTest(TestCase):
+    """
+    Test suite for the logout view.
+    Tests that users can successfully log out and are redirected properly.
+    """
+    
+    @classmethod
+    def setUpTestData(cls):
+        """
+        Create a test user for logout tests.
+        """
+        cls.test_user = User.objects.create_user(
+            username='testuser',
+            password='testpass123'
+        )
+        cls.logout_url = '/logout/'
+    
+    def test_logout_view_redirects_to_login(self):
+        """
+        Test that logout redirects to login page.
+        """
+        # First log in the user
+        self.client.login(username='testuser', password='testpass123')
+        
+        # Then log out
+        response = self.client.get(self.logout_url)
+        
+        # Should redirect to login page
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/login/')
+    
+    def test_logout_view_logs_user_out(self):
+        """
+        Test that logout actually logs the user out.
+        """
+        # Log in the user
+        self.client.login(username='testuser', password='testpass123')
+        
+        # Verify user is logged in
+        response = self.client.get('/recipe/home/')
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+        
+        # Log out
+        self.client.get(self.logout_url)
+        
+        # Verify user is logged out
+        response = self.client.get('/login/')
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+
+class RegisterViewTest(TestCase):
+    """
+    Test suite for the registration view.
+    Tests user registration with valid/invalid data, password validation, and username uniqueness.
+    """
+    
+    def setUp(self):
+        """
+        Set up runs before each test method.
+        No pre-existing users needed for most registration tests.
+        """
+        self.register_url = '/register/'
+    
+    def test_register_view_get_request(self):
+        """
+        Test that GET request to register page returns 200 and uses correct template.
+        """
+        response = self.client.get(self.register_url)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/register.html')
+        self.assertIn('form', response.context)
+        self.assertIsNone(response.context.get('error_message'))
+    
+    def test_register_view_post_valid_data(self):
+        """
+        Test that POST with valid data creates user, logs them in, and redirects to home.
+        """
+        response = self.client.post(self.register_url, {
+            'username': 'newuser',
+            'password1': 'TestPass123!',
+            'password2': 'TestPass123!'
+        })
+        
+        # Should redirect to recipes home page
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/recipe/home/')
+        
+        # Verify user was created
+        self.assertTrue(User.objects.filter(username='newuser').exists())
+        
+        # Verify user is logged in
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+        self.assertEqual(response.wsgi_request.user.username, 'newuser')
+    
+    def test_register_view_post_password_mismatch(self):
+        """
+        Test that POST with mismatched passwords shows error.
+        """
+        response = self.client.post(self.register_url, {
+            'username': 'newuser',
+            'password1': 'TestPass123!',
+            'password2': 'DifferentPass123!'
+        })
+        
+        # Should stay on register page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/register.html')
+        
+        # Should show error message
+        self.assertIn('error_message', response.context)
+        self.assertEqual(response.context['error_message'], 'Registration failed. Please correct the errors below.')
+        
+        # User should not be created
+        self.assertFalse(User.objects.filter(username='newuser').exists())
+        
+        # User should not be logged in
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+    
+    def test_register_view_post_duplicate_username(self):
+        """
+        Test that POST with existing username shows error.
+        """
+        # Create an existing user
+        User.objects.create_user(username='existinguser', password='TestPass123!')
+        
+        # Try to register with same username
+        response = self.client.post(self.register_url, {
+            'username': 'existinguser',
+            'password1': 'TestPass123!',
+            'password2': 'TestPass123!'
+        })
+        
+        # Should stay on register page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/register.html')
+        
+        # Should show error message
+        self.assertEqual(response.context['error_message'], 'Registration failed. Please correct the errors below.')
+        
+        # Form should have errors
+        self.assertFalse(response.context['form'].is_valid())
+        
+        # Should still be only one user with that username
+        self.assertEqual(User.objects.filter(username='existinguser').count(), 1)
+    
+    def test_register_view_post_weak_password(self):
+        """
+        Test that POST with weak password (too short or common) shows error.
+        """
+        response = self.client.post(self.register_url, {
+            'username': 'newuser',
+            'password1': 'pass',
+            'password2': 'pass'
+        })
+        
+        # Should stay on register page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/register.html')
+        
+        # Should show error message
+        self.assertEqual(response.context['error_message'], 'Registration failed. Please correct the errors below.')
+        
+        # User should not be created
+        self.assertFalse(User.objects.filter(username='newuser').exists())
+    
+    def test_register_view_post_empty_fields(self):
+        """
+        Test that POST with empty fields shows form errors.
+        """
+        response = self.client.post(self.register_url, {
+            'username': '',
+            'password1': '',
+            'password2': ''
+        })
+        
+        # Should stay on register page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'auth/register.html')
+        
+        # Form should have errors
+        self.assertFalse(response.context['form'].is_valid())
+        
+        # User should not be created
+        self.assertEqual(User.objects.count(), 0)
+    
+    def test_register_view_post_numeric_password(self):
+        """
+        Test that POST with purely numeric password shows error.
+        Django's default validators reject purely numeric passwords.
+        """
+        response = self.client.post(self.register_url, {
+            'username': 'newuser',
+            'password1': '12345678',
+            'password2': '12345678'
+        })
+        
+        # Should stay on register page
+        self.assertEqual(response.status_code, 200)
+        
+        # Should show error message
+        self.assertEqual(response.context['error_message'], 'Registration failed. Please correct the errors below.')
+        
+        # User should not be created
+        self.assertFalse(User.objects.filter(username='newuser').exists())
         
