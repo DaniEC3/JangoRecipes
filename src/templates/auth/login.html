@@ -18,14 +18,19 @@
     <form action="" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
       {% csrf_token %}
 
-      {{form}}
+      <div style="display: flex; flex-direction: column; gap: 15px; text-align: center;">
+        {{form}}
+      </div>
 
       <button type="submit"
         style="background-color: #f97316; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background-color 0.3s;">
         Login
       </button>
-      <p style="text-align: center; margin-top: 10px;">
+      <p style="text-align: center; margin-top: 1px;">
         Don't have an account? <a href="{% url 'register' %}" style="color: #f97316; text-decoration: none; font-weight: bold;">Register here</a>
+      </p>
+      <p style="text-align: center; color: #666; font-size: 14px;">
+        Or try our test user <strong>UserTest2324214</strong> and <strong>TestPassword000</strong> for password
       </p>
     </form>
   </div>
